@@ -9,41 +9,57 @@ export default class MovieService {
   
   async getResource(url) {
     const res = await fetch(url, this.options);
-    
+    const body = await res.json()
+    // console.log(typeof res.status)
+    // console.log(res)
     if(!res.ok) {
-      throw new Error(`Movie not found in ${url}`)
+      throw new Error(res.status)
     }
-    return await res.json()
+    if(body.results.length === 0) {
+      throw new Error(res.status)
+    }
+    return body
   };
 
-  async getMovies() {
-    const movieName = 'Turtles'
-    const res = await this.getResource(`https://api.themoviedb.org/3/search/movie?query=${movieName}&include_adult=false&language=en-US&page=1`);
+  async getMovies(requestValue) {
+    const res = await this.getResource(`https://api.themoviedb.org/3/search/movie?query=${requestValue}&include_adult=false&language=en-US&page=1`)
+    const pagesNum = res.total_pages
+    const movies = res.results.map(this.__transformMovieResults)
+    return ({movies, pagesNum})
+  };
+
+  async changePage(requestValue, pageNum) {
+    const res = await this.getResource(`https://api.themoviedb.org/3/search/movie?query=${requestValue}&include_adult=false&language=en-US&page=${pageNum}`)
     return res.results.map(this.__transformMovieResults)
   };
-  
+
   async getTopRated() {
-    const res = await this.getResource('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1')
-    return res.results.map(this.__transformMovieResults)
-  };
+  const res = await this.getResource('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1')
+  return res.results.map(this.__transformMovieResults)
+};
 
-  async getPosters() {
-    fetch('https://api.themoviedb.org/3/collection/1162572/images')
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
-  };
-  
   __transformMovieResults(movie) {
     return{
       id: movie.id,
       title: movie.title,
       date: movie.release_date,
       overview: movie.overview,
-      poster: movie.poster_path
+      poster: movie.poster_path,
     }
   }
 };
+
+
+
+// async getPosters() {
+//   fetch('https://api.themoviedb.org/3/collection/1162572/images')
+//   .then(response => response.json())
+//   .then(response => console.log(response))
+//   .catch(err => console.error(err));
+// };
+
+
+
 
 // const value = 'back to the future'
 

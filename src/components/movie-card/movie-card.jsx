@@ -24,13 +24,12 @@ const pStyle = {
 
 function MovieCard(props) {
   const {title, date, overview, poster} = props;
+  // console.log(props)
   const url = `https://image.tmdb.org/t/p/w500/${poster}`
-  let newDate = null;
-  if(date) {
-    newDate = format (new Date(date), 'MMMM d, yyy')
-  } else {
-    newDate = 'Release date is not available'
-  }
+  let newDate = date 
+                    ? format (new Date(date), 'MMMM d, yyy') 
+                    : 'Release date is not available';
+  let newOverview = overview || 'Overview is not available';
   return (
     <li>
       <Card
@@ -44,7 +43,7 @@ function MovieCard(props) {
       <Flex>
         <Flex>
           <img
-            alt='movie-poster'
+            alt='movie poster'
             src={url}
             style={imgStyle}
           />
@@ -93,17 +92,13 @@ function MovieCard(props) {
               align="start"
               style={pStyle}
             >
-              {overview}
+              {newOverview}
             </Typography.Paragraph>
         </Flex>
       </Flex>
     </Card>
   </li>
   )
-}
-
-MovieCard.defaultProps = {
-  date: '2000-01-01'
 }
 
 export default MovieCard;
