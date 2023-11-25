@@ -23,8 +23,8 @@ onValueLoaded = (requestValue) => {
 
 sendRequestToApi = debounce(() => {
   const { requestValue } = this.state
-  const { onRequestToApi } = this.props
-  onRequestToApi(requestValue)
+  const { onRequestToMovie } = this.props
+  onRequestToMovie(requestValue)
   this.onValueLoaded('')
 },2000)
 

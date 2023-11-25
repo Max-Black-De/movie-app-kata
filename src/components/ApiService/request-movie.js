@@ -1,9 +1,12 @@
 export default class MovieService {
+  _apiBase = 'https://api.themoviedb.org/3';
+  _apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjI5YTU0NjQwZjlkNjM5MjdhNTU2ZWNmMGJiOGJiMCIsInN1YiI6IjY1NGI1NzVhMjg2NmZhMDExYmQxNWFjNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVe2c3u7HpKmqFrIwIh-Tra8FKE8-G6hR-M6WrXJ69Q'
+
   options = {
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjI5YTU0NjQwZjlkNjM5MjdhNTU2ZWNmMGJiOGJiMCIsInN1YiI6IjY1NGI1NzVhMjg2NmZhMDExYmQxNWFjNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVe2c3u7HpKmqFrIwIh-Tra8FKE8-G6hR-M6WrXJ69Q'
+      Authorization: `Bearer ${this._apiToken}`
     }
   };
   
@@ -21,11 +24,12 @@ export default class MovieService {
     return body
   };
 
-  async getMovies(requestValue) {
-    const res = await this.getResource(`https://api.themoviedb.org/3/search/movie?query=${requestValue}&include_adult=false&language=en-US&page=1`)
-    const pagesNum = res.total_pages
+  async getMovies(requestValue, page) {
+    const pageNum = page || 1;
+    const res = await this.getResource(`${this._apiBase}/search/movie?query=${requestValue}&include_adult=false&language=en-US&page=${pageNum}`)
+    const totalPages = res.total_pages
     const movies = res.results.map(this.__transformMovieResults)
-    return ({movies, pagesNum})
+    return ({movies, totalPages})
   };
 
   async changePage(requestValue, pageNum) {
@@ -33,9 +37,12 @@ export default class MovieService {
     return res.results.map(this.__transformMovieResults)
   };
 
-  async getTopRated() {
-  const res = await this.getResource('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1')
-  return res.results.map(this.__transformMovieResults)
+  async getTrending() {
+    const res = await this.getResource(`${this._apiBase}/trending/movie/day?language=en-US`)
+    // const res = await this.getResource(`${this._apiBase}/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`)
+    const totalPages = res.total_pages
+  const movies = res.results.map(this.__transformMovieResults)
+  return ({movies, totalPages})
 };
 
   __transformMovieResults(movie) {
@@ -57,27 +64,3 @@ export default class MovieService {
 //   .then(response => console.log(response))
 //   .catch(err => console.error(err));
 // };
-
-
-
-
-// const value = 'back to the future'
-
-// const options = {
-//   method: 'GET',
-//   headers: {
-//     accept: 'application/json',
-//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjI5YTU0NjQwZjlkNjM5MjdhNTU2ZWNmMGJiOGJiMCIsInN1YiI6IjY1NGI1NzVhMjg2NmZhMDExYmQxNWFjNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVe2c3u7HpKmqFrIwIh-Tra8FKE8-G6hR-M6WrXJ69Q'
-//   }
-// };
-
-// function buttonClickHandler() {
-//   console.log('movie-card clicked')
-//   fetch(`https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`, options)
-//     .then(response => response.json())
-//     .then(json => console.log(json))
-//   fetch('https://api.themoviedb.org/3/movie/105/images', options)
-//     .then(response => response.json())
-//     .then(json => console.log(json))
-//     .catch(err => console.error(err));
-// }

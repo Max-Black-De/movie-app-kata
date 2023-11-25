@@ -5,14 +5,18 @@ import { Result } from "antd";
 export default class ErrorIndicator extends Component {
 
   render() {
-    const { status, title, subtitle} = this.props
+    const { status } = this.props
+    const subtitle = status === '200'
+      ? 'Nothing was found for your request, please repeat your request with different parameters.'
+      : 'Something went wrong, please repeat your request later.';
+    const resultStatus = status === '200' ? '404' : '500'
+
     return(
       <Result
-        status={status}
-        title={title}
+        status={resultStatus}
+        title='Sorry'
         subTitle={subtitle}
       />
     )
   }
-
 };

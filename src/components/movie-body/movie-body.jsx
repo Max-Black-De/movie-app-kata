@@ -3,27 +3,46 @@ import React from "react";
 import { Pagination } from "antd";
 import { MovieList } from "../movie-list";
 import { InputMovieApp } from "../input-movie";
+import { ErrorIndicator } from '../error-indicator';
 
 
 function MovieBody(props) {
-  const { onRequestToApi, onMoviesLoaded, onError, movies, onChangePage, pagesNum } = props
+
+  const { onRequestToMovie,
+          onError,
+          movies,
+          onChangePage,
+          totalPages,
+          errorStatus,
+          error } = props;
+
+  const pagination = <Pagination
+                        onChange={onChangePage}
+                        hideOnSinglePage={true}
+                        responsive={true}
+                        defaultCurrent={1}
+                        pageSize={20}
+                        pageSizeOptions={[]}
+                        total={totalPages * 10}
+                      />
+
+  const errorMovieToggle = error
+    ? <ErrorIndicator status={errorStatus} />
+    : <React.Fragment>
+        {pagination}
+        <MovieList movies={movies}/>
+        {pagination}
+      </React.Fragment>
+
   return(
     <div className='movie-body'>
+      <InputMovieApp
+            onRequestToMovie={onRequestToMovie}
+            onError={onError}
+      />
       <section>
-        <InputMovieApp
-          onRequestToApi={onRequestToApi}
-          onMoviesLoaded={onMoviesLoaded}
-          onError={onError}
-        />
+        {errorMovieToggle}
       </section>
-      <MovieList movies={movies}/>
-      <section>
-        <Pagination
-          onChange={onChangePage}
-          defaultCurrent={1}
-          total={pagesNum * 10}
-        />
-        </section>
     </div>
   )
 };
