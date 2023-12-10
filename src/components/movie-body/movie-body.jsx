@@ -9,7 +9,6 @@ import { ErrorIndicator } from '../error-indicator';
 function MovieBody(props) {
 
   const { onRequestToMovie,
-          onError,
           movies,
           onChangePage,
           totalPages,
@@ -24,6 +23,7 @@ function MovieBody(props) {
                         pageSize={20}
                         pageSizeOptions={[]}
                         total={totalPages * 10}
+                        showSizeChanger={false}
                       />
 
   const errorMovieToggle = error
@@ -31,14 +31,13 @@ function MovieBody(props) {
     : <React.Fragment>
         {pagination}
         <MovieList movies={movies}/>
-        {pagination}
+        {/* {pagination} */}
       </React.Fragment>
 
   return(
     <div className='movie-body'>
       <InputMovieApp
             onRequestToMovie={onRequestToMovie}
-            onError={onError}
       />
       <section>
         {errorMovieToggle}

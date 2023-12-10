@@ -19,7 +19,7 @@ export default class MovieList extends Component {
 
   movieItem(arr) {
     return arr.map((movie) => {
-      const { id, title, date, overview, poster } = movie
+      const { id, title, date, overview, poster, rating, genre } = movie
       this.minimizeOverview(overview)
       return  <MovieCard
         key={id}
@@ -27,6 +27,8 @@ export default class MovieList extends Component {
         date={date}
         overview={this.minimizeOverview(overview)}
         poster={poster}
+        rating={rating}
+        genre={genre}
     />
     })
   }

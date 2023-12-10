@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin, Result } from 'antd';
+import { Spin, Result, Tabs } from 'antd';
 import { Offline, Online } from "react-detect-offline";
 
 import './App.css';
@@ -18,11 +18,11 @@ export default class App extends Component {
 
   componentDidMount() {
     this.moviesApiService
-      .getTrending()
+      .getMovies('Home alone')
       .then(this.onLoadedDataToState)
       .catch(this.onError)
-
-    console.log('Mount in AppJSX')
+    this.moviesApiService
+      .getGenreId()
   };
   
   componentDidUpdate() {
@@ -72,10 +72,23 @@ export default class App extends Component {
       loading: false
     })
   }
+  onChangeTabs = (key) => {
+    console.log(key);
+  };
   
   render() {
+    const tabsItems = [
+      {
+        key: '1',
+        label: 'Search',
+      },
+      {
+        key: '2',
+        label: 'Rated',
+      },
+    ];
     const { movies, loading, error, totalPages, errorStatus} = this.state
-    const hasData = !loading
+    const hasData = !(loading && error)
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
       ? <MovieBody
@@ -85,13 +98,13 @@ export default class App extends Component {
           onRequestToMovie={this.onRequestToMovie}
           error={error}
           errorStatus={errorStatus}
-          onError={this.onError}
         />
       : null
 
 
     return (
       <div className='App-substrate'>
+        <Tabs defaultActiveKey="1" items={tabsItems} onChange={this.onChangeTabs} />
         <Online>
           {movieBody}
           {spinner}
