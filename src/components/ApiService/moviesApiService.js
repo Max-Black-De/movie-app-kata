@@ -13,8 +13,8 @@ export default class MovieService {
   async getResource(url) {
     const res = await fetch(url, this.options);
     const body = await res.json()
-    console.log(res)
-    console.log(body)
+    // console.log(res)
+    // console.log(body)
     if(!res.ok) {
       throw new Error(res.status)
     }
@@ -32,14 +32,10 @@ export default class MovieService {
     return ({movies, totalPages})
   };
 
-  async changePage(requestValue, pageNum) {
-    const res = await this.getResource(`${this._apiBase}/3/search/movie?query=${requestValue}&include_adult=false&language=en-US&page=${pageNum}`)
-    return res.results.map(this.__transformMovieResults)
-  };
-
-  async getGenreId() {
+  async getGenresData(data) {
+    // console.log(data)
     const res = await this.getResource(`${this._apiBase}/genre/movie/list?language=en`)
-    console.log(res)
+    return res
   }
 
   __transformMovieResults(movie) {
@@ -50,7 +46,7 @@ export default class MovieService {
       overview: movie.overview,
       poster: movie.poster_path,
       rating: movie.vote_average,
-      genre: movie.genre_ids
+      genreIdsArr: movie.genre_ids
     }
   }
 };

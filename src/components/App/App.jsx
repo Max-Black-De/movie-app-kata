@@ -4,8 +4,9 @@ import { Offline, Online } from "react-detect-offline";
 
 import './App.css';
 
-import MovieService from '../ApiService/request-movie';
+import MovieService from '../ApiService/moviesApiService';
 import MovieBody from '../movie-body/movie-body';
+import { MoviesApiServiceProvider } from '../ApiService/context-movieApiService';
 
 
 export default class App extends Component {
@@ -22,7 +23,10 @@ export default class App extends Component {
       .then(this.onLoadedDataToState)
       .catch(this.onError)
     this.moviesApiService
-      .getGenreId()
+      .getGenresData()
+      .then(this.onLoadGenres)
+      .catch(this.onError)
+    console.log('Mounted in AppJSX ')
   };
   
   componentDidUpdate() {
@@ -32,6 +36,12 @@ export default class App extends Component {
     console.log('Unmounted in AppJSX')
   }
 
+  onLoadGenres = (data) => {
+    const genresDataAr = data.genres
+    this.setState({
+      genresDataAr
+    })
+  }
   onRequestToMovie = (requestValue) => {
     this.setState({
       requestValue,
@@ -54,8 +64,7 @@ export default class App extends Component {
   }
 
   onLoadedDataToState = (requestData) => {
-    const { movies, totalPages } = requestData
-
+    const { movies, totalPages } = requestData;
     this.setState({
       movies,
       totalPages,
@@ -104,18 +113,20 @@ export default class App extends Component {
 
     return (
       <div className='App-substrate'>
-        <Tabs defaultActiveKey="1" items={tabsItems} onChange={this.onChangeTabs} />
-        <Online>
-          {movieBody}
-          {spinner}
-        </Online>
-        <Offline>
-          <Result
-            status='500'
-            title='Sorry'
-            subtitle='Internet connection is down. Check the connection and repeat the request.'
-          />
-        </Offline>
+        <MoviesApiServiceProvider value={this.state.genresDataAr}>
+          <Tabs centered={true} defaultActiveKey="1" items={tabsItems} onChange={this.onChangeTabs} />
+          <Online>
+            {movieBody}
+            {spinner}
+          </Online>
+          <Offline>
+            <Result
+              status='500'
+              title='Sorry'
+              subtitle='Internet connection is down. Check the connection and repeat the request.'
+            />
+          </Offline>
+        </MoviesApiServiceProvider>
       </div>
     );
   };

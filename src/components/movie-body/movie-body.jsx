@@ -9,39 +9,42 @@ import { ErrorIndicator } from '../error-indicator';
 function MovieBody(props) {
 
   const { onRequestToMovie,
-          movies,
-          onChangePage,
-          totalPages,
-          errorStatus,
-          error } = props;
+    movies,
+    onChangePage,
+    totalPages,
+    errorStatus,
+    error } = props;
 
   const pagination = <Pagination
-                        onChange={onChangePage}
-                        hideOnSinglePage={true}
-                        responsive={true}
-                        defaultCurrent={1}
-                        pageSize={20}
-                        pageSizeOptions={[]}
-                        total={totalPages * 10}
-                        showSizeChanger={false}
-                      />
+  simple={false}
+    onChange={onChangePage}
+    hideOnSinglePage={true}
+    responsive={true}
+    defaultCurrent={1}
+    pageSize={20}
+    pageSizeOptions={[]}
+    total={totalPages * 10}
+    showSizeChanger={false}
+  />
 
   const errorMovieToggle = error
     ? <ErrorIndicator status={errorStatus} />
-    : <React.Fragment>
+    : <>
         {pagination}
-        <MovieList movies={movies}/>
-        {/* {pagination} */}
-      </React.Fragment>
+        <MovieList movies={movies} />
+      {/* {pagination} */}
+      </>
 
-  return(
+  return (
     <div className='movie-body'>
+
       <InputMovieApp
-            onRequestToMovie={onRequestToMovie}
+        onRequestToMovie={onRequestToMovie}
       />
       <section>
         {errorMovieToggle}
       </section>
+
     </div>
   )
 };

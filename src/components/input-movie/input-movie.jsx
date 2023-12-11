@@ -9,24 +9,24 @@ export default class InputMovieApp extends Component {
     requestValue: ''
   }
 
-inputHandler = (e) => {
-  let { value } = e.target
-  this.onValueLoaded(value)
-  this.sendRequestToApi()
-};
+  inputHandler = (e) => {
+    let { value } = e.target
+    this.onValueLoaded(value)
+    this.sendRequestToApi()
+  };
 
-onValueLoaded = (requestValue) => {
-  this.setState({
-    requestValue
-  })
-};
+  onValueLoaded = (requestValue) => {
+    this.setState({
+      requestValue
+    })
+  };
 
-sendRequestToApi = debounce(() => {
-  const { requestValue } = this.state
-  const { onRequestToMovie } = this.props
-  onRequestToMovie(requestValue)
-  this.onValueLoaded('')
-},2000)
+  sendRequestToApi = debounce(() => {
+    const { requestValue } = this.state
+    const { onRequestToMovie } = this.props
+    onRequestToMovie(requestValue)
+    this.onValueLoaded('')
+  },2000)
 
   render() {
     return (

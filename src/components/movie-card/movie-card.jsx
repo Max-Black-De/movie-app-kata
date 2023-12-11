@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Card, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
 
-
 import './movie-card.css';
+
 const cardStyle = {
   // width: 451,
   // height: 279,
@@ -34,7 +34,7 @@ const stylesTitleRatingBlock = {
 };
 
 function MovieCard(props) {
-  const { title, date, overview, poster, rating } = props;
+  const { title, date, overview, poster, rating, genreIdsArr, genresDataAr } = props;
   const url = `https://image.tmdb.org/t/p/w500/${poster}`
   const newDate = date
     ? format(new Date(date), 'MMMM d, yyy')
@@ -65,12 +65,29 @@ function MovieCard(props) {
     borderRadius: '50px',
     strokeWidth: 2,
     stroke: `${ratingColor(rating)}`,
-  }
+  };
+  const getGenresArr = (genresDataAr, genreIdsArr) => {
+    const resArr = genresDataAr.reduce((acc, el) => {
+      genreIdsArr.forEach(elem =>{ 
+        if(el.id === elem ){
+          acc.push(el.name)
+        }
+      })
+      return acc
+    }, []);
+    return resArr
+  };
+  const genresItem = () => {
+    return getGenresArr(genresDataAr, genreIdsArr).map(id => 
+      <Button key={id} size='small' >
+        {id}
+      </Button>
+    )
+  };
 
   return (
     <li className='movieCardItem'>
       <Card
-        hoverable
         style={cardStyle}
         bodyStyle={{
           padding: 0,
@@ -101,9 +118,7 @@ function MovieCard(props) {
                 paddingBottom: 7
               }}
             >
-              <Flex
-                style={stylesTitleRatingBlock}
-              >
+              <Flex style={stylesTitleRatingBlock}>
                 <Typography.Title
                   style={{
                     margin: 0
@@ -123,30 +138,18 @@ function MovieCard(props) {
 
               <Flex
                 gap={8}
+                wrap='wrap'
               >
-                <Button size='small' href="https://ant.design" target="_blank">
-                  Action
-                </Button>
-                <Button size='small' href="https://ant.design" target="_blank">
-                  Drama
-                </Button>
+                {genresItem()}
               </Flex>
             </Flex>
             <Typography.Paragraph
-              align="start"
+              align='start'
               style={pStyle}
             >
               {newOverview}
             </Typography.Paragraph>
-            <Rate theme={{
-              token: {
-                /* here is your global tokens */
-                colorText: 'rgba(255, 0, 0, 1)',
-                fontSize: 17,
-                marginXS: 18
-              },
-            }}
-              allowHalf defaultValue={0} count={10} />
+            <Rate allowHalf defaultValue={0} count={10} />
           </Flex>
         </Flex>
       </Card>
