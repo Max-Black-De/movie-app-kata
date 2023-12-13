@@ -23,6 +23,9 @@ export default class App extends Component {
       .then(this.onLoadedDataToState)
       .catch(this.onError)
     this.moviesApiService
+      .createGuestSession()
+      .then(this.setSessionId)
+    this.moviesApiService
       .getGenresData()
       .then(this.onLoadGenres)
       .catch(this.onError)
@@ -36,10 +39,14 @@ export default class App extends Component {
     console.log('Unmounted in AppJSX')
   }
 
-  onLoadGenres = (data) => {
-    const genresDataAr = data.genres
+  onLoadGenres = (genresDataAr) => {
     this.setState({
       genresDataAr
+    })
+  }
+  setSessionId = (sessionId) => {
+    this.setState({
+      sessionId
     })
   }
   onRequestToMovie = (requestValue) => {
@@ -52,13 +59,13 @@ export default class App extends Component {
       .catch(this.onError)
   };
 
-  onChangePage = (pageNum) => {
+  onChangePage = (page) => {
     this.setState({
-      page: pageNum
+      page
     })
     const { requestValue } = this.state;
     this.moviesApiService
-      .getMovies(requestValue, pageNum)
+      .getMovies(requestValue, page)
       .then(this.onLoadedDataToState)
       .catch(this.onError)
   }
@@ -82,7 +89,14 @@ export default class App extends Component {
     })
   }
   onChangeTabs = (key) => {
+    const { sessionId } = this.state
+    this.moviesApiService
+      .getMyRatedFilms(sessionId)
     console.log(key);
+  };
+  onRatedMovie = (movieId, value) => {
+    const { sessionId } = this.state
+    this.moviesApiService.postRatedMovie(movieId, sessionId, value)
   };
   
   render() {
@@ -102,6 +116,7 @@ export default class App extends Component {
     const movieBody = hasData
       ? <MovieBody
           movies={movies}
+          sessionId={this.state.sessionId}
           totalPages={totalPages}
           onChangePage={this.onChangePage}
           onRequestToMovie={this.onRequestToMovie}
@@ -113,7 +128,7 @@ export default class App extends Component {
 
     return (
       <div className='App-substrate'>
-        <MoviesApiServiceProvider value={this.state.genresDataAr}>
+        <MoviesApiServiceProvider value={this}>
           <Tabs centered={true} defaultActiveKey="1" items={tabsItems} onChange={this.onChangeTabs} />
           <Online>
             {movieBody}

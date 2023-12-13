@@ -2,7 +2,11 @@ import React from 'react';
 import { Button, Card, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
 
+import MovieService from '../ApiService/moviesApiService';
+
 import './movie-card.css';
+
+const moviesApiService = new MovieService();
 
 const cardStyle = {
   // width: 451,
@@ -34,7 +38,7 @@ const stylesTitleRatingBlock = {
 };
 
 function MovieCard(props) {
-  const { title, date, overview, poster, rating, genreIdsArr, genresDataAr } = props;
+  const { movieId, title, date, overview, poster, rating, genreIdsArr, onRatedMovie } = props;
   const url = `https://image.tmdb.org/t/p/w500/${poster}`
   const newDate = date
     ? format(new Date(date), 'MMMM d, yyy')
@@ -67,7 +71,7 @@ function MovieCard(props) {
     stroke: `${ratingColor(rating)}`,
   };
   const getGenresArr = (genresDataAr, genreIdsArr) => {
-    const resArr = genresDataAr.reduce((acc, el) => {
+    return genresDataAr.reduce((acc, el) => {
       genreIdsArr.forEach(elem =>{ 
         if(el.id === elem ){
           acc.push(el.name)
@@ -75,10 +79,9 @@ function MovieCard(props) {
       })
       return acc
     }, []);
-    return resArr
   };
   const genresItem = () => {
-    return getGenresArr(genresDataAr, genreIdsArr).map(id => 
+    return getGenresArr([{id: 28, name: 'drama'}], genreIdsArr).map(id => 
       <Button key={id} size='small' >
         {id}
       </Button>
@@ -149,7 +152,10 @@ function MovieCard(props) {
             >
               {newOverview}
             </Typography.Paragraph>
-            <Rate allowHalf defaultValue={0} count={10} />
+            <Rate
+              onChange={(value) => onRatedMovie(movieId, value)}
+              allowHalf defaultValue={0} count={10}
+            />
           </Flex>
         </Flex>
       </Card>

@@ -5,39 +5,39 @@ import { MovieList } from "../movie-list";
 import { InputMovieApp } from "../input-movie";
 import { ErrorIndicator } from '../error-indicator';
 
-
 function MovieBody(props) {
 
   const { onRequestToMovie,
     movies,
+    sessionId,
     onChangePage,
+    onRatedMovie,
     totalPages,
     errorStatus,
     error } = props;
 
   const pagination = <Pagination
-  simple={false}
     onChange={onChangePage}
     hideOnSinglePage={true}
     responsive={true}
-    defaultCurrent={1}
-    pageSize={20}
-    pageSizeOptions={[]}
+    defaultPageSize={20}
     total={totalPages * 10}
     showSizeChanger={false}
+    defaultCurrent={1}
   />
 
   const errorMovieToggle = error
     ? <ErrorIndicator status={errorStatus} />
     : <>
         {pagination}
-        <MovieList movies={movies} />
+        <MovieList
+          movies={movies}
+        />
       {/* {pagination} */}
       </>
 
   return (
     <div className='movie-body'>
-
       <InputMovieApp
         onRequestToMovie={onRequestToMovie}
       />
