@@ -9,11 +9,11 @@ export default class MovieService {
       accept: 'application/json',
     }
   };
-  
+
   async getResource(url, options) {
     const res = await fetch(url, options);
     const body = await res.json()
-    if(!res.ok) {
+    if (!res.ok) {
       throw new Error(res.status)
     }
     // if(body.results.length === 0 || body.genres.length === 0) {
@@ -27,7 +27,7 @@ export default class MovieService {
     const res = await this.getResource(`${this._apiBase}/search/movie?api_key=${this._apiKey}&query=${requestValue}&include_adult=false&language=en-US&page=${pageNum}`, this.getOptions)
     const totalPages = res.total_pages
     const movies = res.results.map(this.__transformMovieResults)
-    return ({movies, totalPages})
+    return ({ movies, totalPages })
   };
 
   async getGenresData() {
@@ -41,37 +41,51 @@ export default class MovieService {
   };
 
   async getMyRatedFilms(sessionId, page) {
-      const pageNum = page || 1;
-      console.log(sessionId)
-      const res = await this.getResource(
-        `${this._apiBase}/guest_session/${sessionId}/rated/movies?api_key=${this._apiKey}&language=en-US&page=${pageNum}&sort_by=created_at.asc`,
-        this.getOptions)
-      console.log(res)
-    };
+    const pageNum = page || 1;
+    console.log(sessionId)
+    const res = await this.getResource(
+      `${this._apiBase}/guest_session/${sessionId}/rated/movies?api_key=${this._apiKey}&language=en-US&page=${pageNum}&sort_by=created_at.asc`,
+      this.getOptions)
+    const totalPages = res.total_pages
+    const ratedMovies = res.results.map(this.__transformRatedMovieResults)
+    return ({ totalPages, ratedMovies })
+  };
 
   async postRatedMovie(movieId, sessionId, value) {
     const res = await fetch(
       `${this._apiBase}/movie/${movieId}/rating?api_key=${this._apiKey}&guest_session_id=${sessionId}`,
-        {
-          method: 'POST',
-          headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          body: JSON.stringify({value: value})
-        }
-  )
+      {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({ value: value })
+      }
+    )
     return res
   }
 
   __transformMovieResults(movie) {
-    return{
+    return {
       id: movie.id,
       title: movie.title,
       date: movie.release_date,
       overview: movie.overview,
       poster: movie.poster_path,
       rating: movie.vote_average,
+      genreIdsArr: movie.genre_ids
+    }
+  }
+  __transformRatedMovieResults(movie) {
+    return {
+      id: movie.id,
+      title: movie.title,
+      date: movie.release_date,
+      overview: movie.overview,
+      poster: movie.poster_path,
+      rating: movie.vote_average,
+      myRating: movie.rating,
       genreIdsArr: movie.genre_ids
     }
   }

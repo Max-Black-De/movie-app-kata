@@ -9,9 +9,9 @@ function MovieBody(props) {
 
   const { onRequestToMovie,
     movies,
-    sessionId,
+    ratedMovies,
+    tabsKey,
     onChangePage,
-    onRatedMovie,
     totalPages,
     errorStatus,
     error } = props;
@@ -29,22 +29,24 @@ function MovieBody(props) {
   const errorMovieToggle = error
     ? <ErrorIndicator status={errorStatus} />
     : <>
-        {pagination}
-        <MovieList
-          movies={movies}
-        />
+      {pagination}
+      <MovieList
+        movies={movies}
+        ratedMovies={ratedMovies}
+        tabsKey={tabsKey}
+      />
       {/* {pagination} */}
-      </>
+    </>
+  const inputNullToggle = tabsKey
+    ? <InputMovieApp onRequestToMovie={onRequestToMovie} />
+    : null
 
   return (
     <div className='movie-body'>
-      <InputMovieApp
-        onRequestToMovie={onRequestToMovie}
-      />
+      {inputNullToggle}
       <section>
         {errorMovieToggle}
       </section>
-
     </div>
   )
 };

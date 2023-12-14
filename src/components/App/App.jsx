@@ -14,7 +14,9 @@ export default class App extends Component {
   
   state = {
     movies: [],
+    ratedMovies: [],
     loading: true,
+    tabsKey: true,
   }
 
   componentDidMount() {
@@ -43,12 +45,12 @@ export default class App extends Component {
     this.setState({
       genresDataAr
     })
-  }
+  };
   setSessionId = (sessionId) => {
     this.setState({
       sessionId
     })
-  }
+  };
   onRequestToMovie = (requestValue) => {
     this.setState({
       requestValue,
@@ -58,7 +60,6 @@ export default class App extends Component {
       .then(this.onLoadedDataToState)
       .catch(this.onError)
   };
-
   onChangePage = (page) => {
     this.setState({
       page
@@ -68,8 +69,7 @@ export default class App extends Component {
       .getMovies(requestValue, page)
       .then(this.onLoadedDataToState)
       .catch(this.onError)
-  }
-
+  };
   onLoadedDataToState = (requestData) => {
     const { movies, totalPages } = requestData;
     this.setState({
@@ -79,7 +79,15 @@ export default class App extends Component {
       error: false
     });
   };
-  
+  onLoadedRatedDataToState = (requestData) => {
+    const { ratedMovies, totalPages } = requestData;
+    this.setState({
+      ratedMovies,
+      totalPages,
+      loading: false,
+      error: false
+    });
+  };
   onError = (err) => {
     const { message } = err
     this.setState({
@@ -87,13 +95,19 @@ export default class App extends Component {
       error: true,
       loading: false
     })
-  }
-  onChangeTabs = (key) => {
+  };
+
+  onChangeTabs = (tabsKey) => {
+    this.setState({
+      tabsKey
+    })
     const { sessionId } = this.state
     this.moviesApiService
       .getMyRatedFilms(sessionId)
-    console.log(key);
+      .then(this.onLoadedRatedDataToState)
+      .catch(this.onError)
   };
+
   onRatedMovie = (movieId, value) => {
     const { sessionId } = this.state
     this.moviesApiService.postRatedMovie(movieId, sessionId, value)
@@ -102,21 +116,23 @@ export default class App extends Component {
   render() {
     const tabsItems = [
       {
-        key: '1',
+        key: true,
         label: 'Search',
       },
       {
-        key: '2',
+        key: false,
         label: 'Rated',
       },
     ];
-    const { movies, loading, error, totalPages, errorStatus} = this.state
+    const { movies, ratedMovies, loading, error, totalPages, errorStatus, tabsKey, sessionId} = this.state
     const hasData = !(loading && error)
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
       ? <MovieBody
           movies={movies}
-          sessionId={this.state.sessionId}
+          ratedMovies={ratedMovies}
+          tabsKey={tabsKey}
+          sessionId={sessionId}
           totalPages={totalPages}
           onChangePage={this.onChangePage}
           onRequestToMovie={this.onRequestToMovie}

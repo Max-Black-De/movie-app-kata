@@ -19,7 +19,7 @@ export default class MovieList extends Component {
 
   movieItem(arr) {
     return arr.map((movie) => {
-      
+      console.log(movie)
       const { id, title, date, overview, poster, rating, genreIdsArr } = movie
       this.minimizeOverview(overview)
       return (
@@ -47,11 +47,13 @@ export default class MovieList extends Component {
   }
 
   render() {
-    const { movies } = this.props
-    const item = this.movieItem(movies)
+    const { movies, tabsKey, ratedMovies } = this.props
+    const item = this.movieItem(tabsKey ? movies : ratedMovies)
     return (
       <ul className='App-list'>
-        {item}
+        {
+          item
+        }
       </ul>
     )
   }

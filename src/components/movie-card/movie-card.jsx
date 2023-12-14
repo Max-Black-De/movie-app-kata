@@ -6,8 +6,6 @@ import MovieService from '../ApiService/moviesApiService';
 
 import './movie-card.css';
 
-const moviesApiService = new MovieService();
-
 const cardStyle = {
   // width: 451,
   // height: 279,
@@ -72,7 +70,7 @@ function MovieCard(props) {
   };
   const getGenresArr = (genresDataAr, genreIdsArr) => {
     return genresDataAr.reduce((acc, el) => {
-      genreIdsArr.forEach(elem =>{ 
+      genreIdsArr.forEach(elem => { 
         if(el.id === elem ){
           acc.push(el.name)
         }
