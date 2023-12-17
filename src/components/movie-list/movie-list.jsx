@@ -6,6 +6,12 @@ import './movie-list.css';
 import { MoviesApiServiceConsumer } from '../ApiService/context-movieApiService';
 
 export default class MovieList extends Component {
+  // componentDidUpdate() {
+  //   console.log('Updated in movie-list ')
+  // }
+  // componentWillUnmount() {
+  //   console.log('Unmounted in movie-list')
+  // }
   minimizeOverview = (text) => {
     if (text.length <= 200) {
       return text
@@ -19,25 +25,36 @@ export default class MovieList extends Component {
 
   movieItem(arr) {
     return arr.map((movie) => {
-      console.log(movie)
-      const { id, title, date, overview, poster, rating, genreIdsArr } = movie
+      const {
+        id,
+        title,
+        date,
+        overview,
+        poster,
+        rating,
+        genreIdsArr,
+        myRating
+      } = movie
       this.minimizeOverview(overview)
       return (
         <MoviesApiServiceConsumer key={id}>
           {
             ({state, onRatedMovie}) => {
-              return <MovieCard
-                key={id}
-                movieId={id}
-                title={title}
-                date={date}
-                overview={this.minimizeOverview(overview)}
-                poster={poster}
-                rating={rating}
-                genreIdsArr={genreIdsArr}
-                genresDataAr={state.genresDataAr}
-                onRatedMovie={onRatedMovie}
-              />
+              return(
+                <MovieCard
+                  key={id}
+                  date={date}
+                  movieId={id}
+                  title={title}
+                  poster={poster}
+                  rating={rating}
+                  myRating={myRating}
+                  genreIdsArr={genreIdsArr}
+                  onRatedMovie={onRatedMovie}
+                  genresDataAr={state.genresDataAr}
+                  overview={this.minimizeOverview(overview)}
+                />
+              )
             }
           }
         </MoviesApiServiceConsumer>
@@ -47,8 +64,8 @@ export default class MovieList extends Component {
   }
 
   render() {
-    const { movies, tabsKey, ratedMovies } = this.props
-    const item = this.movieItem(tabsKey ? movies : ratedMovies)
+    const { movies } = this.props
+    const item = this.movieItem(movies)
     return (
       <ul className='App-list'>
         {

@@ -2,8 +2,6 @@ import React from 'react';
 import { Button, Card, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
 
-import MovieService from '../ApiService/moviesApiService';
-
 import './movie-card.css';
 
 const cardStyle = {
@@ -36,11 +34,23 @@ const stylesTitleRatingBlock = {
 };
 
 function MovieCard(props) {
-  const { movieId, title, date, overview, poster, rating, genreIdsArr, onRatedMovie } = props;
-  const url = `https://image.tmdb.org/t/p/w500/${poster}`
+  const { movieId, title, date, overview, poster, rating, myRating, genreIdsArr, genresDataAr, onRatedMovie } = props;
+  const worldRating = () => {
+    const stringRating = rating.toString()
+    if(stringRating.length > 3) {
+      return stringRating.slice(0, -2)
+    }
+    return stringRating
+  }
+  
+  const url = poster
+    ? `https://image.tmdb.org/t/p/w500/${poster}`
+    : 'https://clipground.com/images/food-availability-clipart-17.png'
+  
   const newDate = date
     ? format(new Date(date), 'MMMM d, yyy')
     : 'Release date is not available';
+
   const newOverview = overview || 'Overview is not available';
   const ratingColor = (rating) => {
     let color = '';
@@ -68,7 +78,7 @@ function MovieCard(props) {
     strokeWidth: 2,
     stroke: `${ratingColor(rating)}`,
   };
-  const getGenresArr = (genresDataAr, genreIdsArr) => {
+  const sortGenres = (genresDataAr, genreIdsArr) => {
     return genresDataAr.reduce((acc, el) => {
       genreIdsArr.forEach(elem => { 
         if(el.id === elem ){
@@ -79,7 +89,8 @@ function MovieCard(props) {
     }, []);
   };
   const genresItem = () => {
-    return getGenresArr([{id: 28, name: 'drama'}], genreIdsArr).map(id => 
+    // console.log(genresDataAr)
+    return sortGenres(genresDataAr, genreIdsArr).map(id => 
       <Button key={id} size='small' >
         {id}
       </Button>
@@ -129,7 +140,7 @@ function MovieCard(props) {
                   {title}
                 </Typography.Title>
                 <Typography.Text style={ratingStyle}>
-                  {rating.toFixed(1)}
+                  {worldRating()}
                 </Typography.Text>
               </Flex>
 
@@ -151,8 +162,17 @@ function MovieCard(props) {
               {newOverview}
             </Typography.Paragraph>
             <Rate
+              value={myRating}
               onChange={(value) => onRatedMovie(movieId, value)}
-              allowHalf defaultValue={0} count={10}
+              allowHalf
+              // defaultValue={myRating}
+              count={10}
+              theme={{
+                token: {
+                  colorText: '#afaf'
+                  /* here is your global tokens */
+                },
+              }}
             />
           </Flex>
         </Flex>

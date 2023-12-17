@@ -23,11 +23,13 @@ export default class MovieService {
   };
 
   async getMovies(requestValue, page) {
-    const pageNum = page || 1;
+    const pageNum = page || 1
     const res = await this.getResource(`${this._apiBase}/search/movie?api_key=${this._apiKey}&query=${requestValue}&include_adult=false&language=en-US&page=${pageNum}`, this.getOptions)
     const totalPages = res.total_pages
+    const basePage = res.page
     const movies = res.results.map(this.__transformMovieResults)
-    return ({ movies, totalPages })
+    // console.log('GetMov', res)
+    return ({ movies, totalPages, basePage })
   };
 
   async getGenresData() {
@@ -37,18 +39,20 @@ export default class MovieService {
 
   async createGuestSession() {
     const res = await this.getResource(`${this._apiBase}/authentication/guest_session/new?api_key=${this._apiKey}`, this.getOptions)
+    // console.log(res.guest_session_id)
     return res.guest_session_id
   };
 
   async getMyRatedFilms(sessionId, page) {
-    const pageNum = page || 1;
-    console.log(sessionId)
+    const pageNum = page || 1
     const res = await this.getResource(
       `${this._apiBase}/guest_session/${sessionId}/rated/movies?api_key=${this._apiKey}&language=en-US&page=${pageNum}&sort_by=created_at.asc`,
       this.getOptions)
+      // console.log('GetRated', res)
     const totalPages = res.total_pages
-    const ratedMovies = res.results.map(this.__transformRatedMovieResults)
-    return ({ totalPages, ratedMovies })
+    const ratedPage = res.page
+    const ratedMovies = res.results.map(this.__transformMovieResults)
+    return ({ totalPages, ratedMovies, ratedPage })
   };
 
   async postRatedMovie(movieId, sessionId, value) {
@@ -63,8 +67,9 @@ export default class MovieService {
         body: JSON.stringify({ value: value })
       }
     )
+    // console.log('PostRate', res)
     return res
-  }
+  };
 
   __transformMovieResults(movie) {
     return {
@@ -74,19 +79,8 @@ export default class MovieService {
       overview: movie.overview,
       poster: movie.poster_path,
       rating: movie.vote_average,
+      myRating: movie.rating || 0,
       genreIdsArr: movie.genre_ids
     }
-  }
-  __transformRatedMovieResults(movie) {
-    return {
-      id: movie.id,
-      title: movie.title,
-      date: movie.release_date,
-      overview: movie.overview,
-      poster: movie.poster_path,
-      rating: movie.vote_average,
-      myRating: movie.rating,
-      genreIdsArr: movie.genre_ids
-    }
-  }
+  };
 };

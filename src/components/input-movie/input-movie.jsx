@@ -31,7 +31,7 @@ export default class InputMovieApp extends Component {
   render() {
     return (
       <Input
-        style={{marginTop: 20}}
+        style={{marginLeft: 36, marginRight: 36, width: '92.87%'}}
         placeholder='Enter your request'
         onChange={this.inputHandler}
         value={this.state.requestValue}

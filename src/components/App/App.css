@@ -1,21 +1,17 @@
 .App-substrate  {
   text-align: center;
   background: #FFF;
-  width: 1010px;
+  max-width: 1010px;
   
 }
-
 .App-list {
-  padding-left: 0px;
-  margin-left: 36px;
-  margin-right: 36px;
+  padding-left: 0;
+  margin-top: 0px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 
 ul {
   list-style: none;
 }
-/* .App-header {
-} */

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin, Result, Tabs } from 'antd';
+import { Spin, Result } from 'antd';
 import { Offline, Online } from "react-detect-offline";
 
 import './App.css';
@@ -7,7 +7,7 @@ import './App.css';
 import MovieService from '../ApiService/moviesApiService';
 import MovieBody from '../movie-body/movie-body';
 import { MoviesApiServiceProvider } from '../ApiService/context-movieApiService';
-
+import Header from '../header/header';
 
 export default class App extends Component {
   moviesApiService = new MovieService();
@@ -17,30 +17,37 @@ export default class App extends Component {
     ratedMovies: [],
     loading: true,
     tabsKey: true,
+    requestValue: 'leo'
   }
-
-  componentDidMount() {
+  onGetMovies = (value, page) => {
     this.moviesApiService
-      .getMovies('Home alone')
+      .getMovies(value, page)
       .then(this.onLoadedDataToState)
       .catch(this.onError)
+  };
+  getRatedFilms = (sessionId, page) => {
     this.moviesApiService
-      .createGuestSession()
-      .then(this.setSessionId)
+      .getMyRatedFilms(sessionId, page)
+      .then(this.onLoadedRatedDataToState)
+      .catch(this.onError)
+  };
+  createGuestSession = () => {
+    this.moviesApiService
+    .createGuestSession()
+    .then(this.setSessionId)
+  };
+  getGenres = () => {
     this.moviesApiService
       .getGenresData()
       .then(this.onLoadGenres)
       .catch(this.onError)
-    console.log('Mounted in AppJSX ')
   };
-  
-  componentDidUpdate() {
-    console.log('Updated in AppJSX ')
-  }
-  componentWillUnmount() {
-    console.log('Unmounted in AppJSX')
-  }
 
+  componentDidMount() {
+    this.onGetMovies(this.state.requestValue, 1)
+    this.createGuestSession()
+    this.getGenres()
+  };
   onLoadGenres = (genresDataAr) => {
     this.setState({
       genresDataAr
@@ -52,38 +59,42 @@ export default class App extends Component {
     })
   };
   onRequestToMovie = (requestValue) => {
+    this.resetPages(1)
     this.setState({
-      requestValue,
+      requestValue
     });
-    this.moviesApiService
-      .getMovies(requestValue)
-      .then(this.onLoadedDataToState)
-      .catch(this.onError)
+    this.onGetMovies(requestValue)
   };
   onChangePage = (page) => {
+    const { tabsKey, requestValue, sessionId } = this.state;
+    this.setState(() => {
+          return tabsKey ? {basePage: page} : {ratedPage: page}
+      })
+      tabsKey
+        ? this.onGetMovies(requestValue, page)
+        : this.getRatedFilms(sessionId, page)
+  };
+  resetPages = (page) => {
     this.setState({
       page
     })
-    const { requestValue } = this.state;
-    this.moviesApiService
-      .getMovies(requestValue, page)
-      .then(this.onLoadedDataToState)
-      .catch(this.onError)
   };
   onLoadedDataToState = (requestData) => {
-    const { movies, totalPages } = requestData;
+    const { movies, totalPages, basePage } = requestData;
     this.setState({
       movies,
-      totalPages,
+      totalBasePages: totalPages,
+      basePage,
       loading: false,
       error: false
     });
   };
   onLoadedRatedDataToState = (requestData) => {
-    const { ratedMovies, totalPages } = requestData;
+    const { ratedMovies, totalPages, ratedPage } = requestData;
     this.setState({
       ratedMovies,
-      totalPages,
+      totalRatedPages: totalPages,
+      ratedPage,
       loading: false,
       error: false
     });
@@ -97,45 +108,53 @@ export default class App extends Component {
     })
   };
 
-  onChangeTabs = (tabsKey) => {
-    this.setState({
-      tabsKey
-    })
-    const { sessionId } = this.state
-    this.moviesApiService
-      .getMyRatedFilms(sessionId)
-      .then(this.onLoadedRatedDataToState)
-      .catch(this.onError)
+  onChangeTabs = (key) => {
+    const { requestValue, basePage, ratedPage, sessionId } = this.state
+    if(key === 2) {
+      this.setState({
+        tabsKey: false
+      })
+      this.getRatedFilms(sessionId, ratedPage)
+    } else {
+      this.setState({
+        tabsKey: true
+      })
+      this.onGetMovies(requestValue, basePage)
+    }
   };
 
   onRatedMovie = (movieId, value) => {
     const { sessionId } = this.state
     this.moviesApiService.postRatedMovie(movieId, sessionId, value)
+    this.getRatedFilms(sessionId)
   };
   
   render() {
-    const tabsItems = [
-      {
-        key: true,
-        label: 'Search',
-      },
-      {
-        key: false,
-        label: 'Rated',
-      },
-    ];
-    const { movies, ratedMovies, loading, error, totalPages, errorStatus, tabsKey, sessionId} = this.state
+    const {
+      movies,
+      ratedMovies,
+      loading,
+      error,
+      errorStatus,
+      tabsKey,
+      sessionId,
+      requestValue,
+      getRatedFilms,
+      basePage,
+      ratedPage,
+      totalBasePages,
+      totalRatedPages
+    } = this.state
+
     const hasData = !(loading && error)
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
       ? <MovieBody
-          movies={movies}
-          ratedMovies={ratedMovies}
-          tabsKey={tabsKey}
+          movies={tabsKey ? movies : ratedMovies}
+          page={tabsKey ? basePage : ratedPage}
           sessionId={sessionId}
-          totalPages={totalPages}
+          totalPages={tabsKey ? totalBasePages : totalRatedPages}
           onChangePage={this.onChangePage}
-          onRequestToMovie={this.onRequestToMovie}
           error={error}
           errorStatus={errorStatus}
         />
@@ -145,7 +164,12 @@ export default class App extends Component {
     return (
       <div className='App-substrate'>
         <MoviesApiServiceProvider value={this}>
-          <Tabs centered={true} defaultActiveKey="1" items={tabsItems} onChange={this.onChangeTabs} />
+          <Header
+            onChangeTabs={this.onChangeTabs}
+            onRequestToMovie={this.onRequestToMovie}
+            requestValue={requestValue}
+            getRatedFilms={getRatedFilms}
+          />
           <Online>
             {movieBody}
             {spinner}
