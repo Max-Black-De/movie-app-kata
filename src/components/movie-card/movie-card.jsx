@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { PropTypes } from 'prop-types';
 
 import './movie-card.css';
@@ -37,51 +38,52 @@ function MovieCard(props) {
     : <p>Release date is not available;</p>
 
   const newOverview = overview || <p>Overview is not available</p>;
-  const ratingColor = (rating) => {
+
+  const ratingColor = () => {
+    let color = ''
     if (Math.trunc(rating) >= 0 && Math.trunc(rating) < 3) {
-      return '#E90000'
+      color = '#E90000'
     }
     if (Math.trunc(rating) >= 3 && Math.trunc(rating) < 5) {
-      return '#E97E00'
+      color = '#E97E00'
     }
     if (Math.trunc(rating) >= 5 && Math.trunc(rating) < 7) {
-      return '#E9D100'
+      color = '#E9D100'
     }
     if (Math.trunc(rating) >= 7) {
-      return '#66E900'
+      color = '#66E900'
     }
+    return color
   };
   const ratingStyle = {
     width: 30,
     height: 30,
     flexShrink: 0,
     border: `solid 2px`,
-    borderColor: `${ratingColor(rating)}`,
+    borderColor: `${ratingColor()}`,
     borderRadius: '50px',
     strokeWidth: 2,
-    stroke: `${ratingColor(rating)}`,
+    stroke: `${ratingColor()}`,
   };
-  const sortGenres = (genresDataAr, genreIdsArr) => {
-    return genresDataAr.reduce((acc, el) => {
-      genreIdsArr.forEach(elem => {
-        if (el.id === elem) {
-          acc.push(el.name)
-        }
-      })
-      return acc
-    }, []);
-  };
+  const sortGenres = () => genresDataAr.reduce((acc, el) => {
+    genreIdsArr.forEach(elem => {
+      if (el.id === elem) {
+        acc.push(el.name)
+      }
+    })
+    return acc
+  }, []);
   const genresItem = () => {
-    if(genreIdsArr.length !== 0){
+    if (genreIdsArr.length !== 0) {
       const sortedGenres = sortGenres(genresDataAr, genreIdsArr).map(genre =>
         <Button className='genresItem' key={uuidv4()} size='small' >
           {genre}
         </Button>
       )
       return sortedGenres
-    } else {
-      return <p> There are no any genres </p>
     }
+    return <p> There are no any genres </p>
+
   };
 
   return (
@@ -130,30 +132,30 @@ function MovieCard(props) {
                 {genresItem()}
               </Flex>
             </Flex>
-          <Typography.Paragraph
-            className='overview-paragraph'
-            align='start'
-          >
-            {newOverview}
-          </Typography.Paragraph>
-          <Rate className='user-rating-block'
-            // value={myRating}
-            onChange={(value) => onRatedMovie(movieId, value)}
-            allowHalf
-            defaultValue={myRating}
-            count={10}
-          />
+            <Typography.Paragraph
+              className='overview-paragraph'
+              align='start'
+            >
+              {newOverview}
+            </Typography.Paragraph>
+            <Rate className='user-rating-block'
+              // value={myRating}
+              onChange={(value) => onRatedMovie(movieId, value)}
+              allowHalf
+              defaultValue={myRating}
+              count={10}
+            />
           </Flex>
         </Flex>
       </div>
     </li>
   )
-};
+}
 
-MovieCard.propType = {
-  genresDataAr: PropTypes.object.isRequired,
+MovieCard.propTypes = {
+  genresDataAr: PropTypes.arrayOf.isRequired,
   onRatedMovie: PropTypes.func.isRequired,
-  genreIdsArr: PropTypes.object.isRequired,
+  genreIdsArr: PropTypes.arrayOf.isRequired,
   overview: PropTypes.string.isRequired,
   myRating: PropTypes.number.isRequired,
   movieId: PropTypes.number.isRequired,

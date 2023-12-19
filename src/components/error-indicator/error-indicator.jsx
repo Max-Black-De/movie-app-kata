@@ -1,22 +1,29 @@
-import React, { Component } from "react"
-
+import React from "react"
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { PropTypes } from 'prop-types'
 import { Result } from "antd";
 
-export default class ErrorIndicator extends Component {
+function ErrorIndicator(props) {
 
-  render() {
-    const { status } = this.props
-    const subtitle = status === '200'
-      ? 'Nothing was found for your request, please repeat your request with different parameters.'
-      : 'Something went wrong, please repeat your request later.';
-    const resultStatus = status === '200' ? '404' : '500'
 
-    return(
-      <Result
-        status={resultStatus}
-        title='Sorry'
-        subTitle={subtitle}
-      />
-    )
-  }
+  const { status } = props
+  const subtitle = status === '200'
+    ? 'Nothing was found for your request, please repeat your request with different parameters.'
+    : 'Something went wrong, please repeat your request later.';
+  const resultStatus = status === '200' ? '404' : '500'
+
+  return (
+    <Result
+      status={resultStatus}
+      title='Sorry'
+      subTitle={subtitle}
+    />
+  )
+
 };
+
+ErrorIndicator.propTypes = {
+  status: PropTypes.string.isRequired
+}
+
+export default ErrorIndicator

@@ -1,6 +1,10 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable class-methods-use-this */
 export default class MovieService {
   _apiBase = 'https://api.themoviedb.org/3';
+
   _apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlNjI5YTU0NjQwZjlkNjM5MjdhNTU2ZWNmMGJiOGJiMCIsInN1YiI6IjY1NGI1NzVhMjg2NmZhMDExYmQxNWFjNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IVe2c3u7HpKmqFrIwIh-Tra8FKE8-G6hR-M6WrXJ69Q'
+
   _apiKey = 'e629a54640f9d63927a556ecf0bb8bb0'
 
   getOptions = {
@@ -61,7 +65,7 @@ export default class MovieService {
           accept: 'application/json',
           'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify({ value: value })
+        body: JSON.stringify({ value })
       }
     )
     return res

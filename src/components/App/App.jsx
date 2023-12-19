@@ -5,39 +5,52 @@ import { Offline, Online } from "react-detect-offline";
 import './App.css';
 
 import MovieService from '../ApiService/moviesApiService';
-import MovieBody from '../movie-body/movie-body';
+import { MovieBody } from '../movie-body';
 import { MoviesApiServiceProvider } from '../ApiService/context-movieApiService';
-import Header from '../header/header';
+import { Header } from '../header';
 
 export default class App extends Component {
   moviesApiService = new MovieService();
-  
+
+  // eslint-disable-next-line react/state-in-constructor
   state = {
     movies: [],
     ratedMovies: [],
+    genresDataAr: [],
     totalBasePages: null,
     totalRatedPages: null,
     loading: true,
     tabsKey: true,
     requestValue: ''
   }
+
+  componentDidMount() {
+    this.onGetMovies('', 1)
+    this.createGuestSession()
+    this.getGenres()
+  }
+
   onGetMovies = async (value, page) => {
     await this.moviesApiService
-            .getMovies(value, page)
-            .then(this.onLoadedDataToState)
-            .catch(this.onError)
+      .getMovies(value, page)
+      .then(this.onLoadedDataToState)
+      .catch(this.onError)
   };
+
   getRatedFilms = async (sessionId, page) => {
     await this.moviesApiService
-            .getMyRatedFilms(sessionId, page)
-            .then(this.onLoadedRatedDataToState)
-            .catch(this.onError)
+      .getMyRatedFilms(sessionId, page)
+      .then(this.onLoadedRatedDataToState)
+      .catch(this.onError)
   };
+
   createGuestSession = async () => {
     await this.moviesApiService
-            .createGuestSession()
-            .then(this.setSessionId)
+      .createGuestSession()
+      .then(this.setSessionId)
+      .catch(this.onError)
   };
+
   getGenres = async () => {
     await this.moviesApiService
       .getGenresData()
@@ -45,42 +58,42 @@ export default class App extends Component {
       .catch(this.onError)
   };
 
-  componentDidMount() {
-    this.onGetMovies('', 1)
-    this.createGuestSession()
-    this.getGenres()
-  };
   onLoadGenres = (genresDataAr) => {
     this.setState({
       genresDataAr
     })
   };
+
   setSessionId = (sessionId) => {
     this.setState({
       sessionId
     })
   };
+
   onRequestToMovie = (requestValue) => {
-    this.resetPages(1)
+    // this.resetPages(1)
     this.setState({
       requestValue
     });
     this.onGetMovies(requestValue)
   };
+
   onChangePage = (page) => {
     const { tabsKey, requestValue, sessionId } = this.state;
-    this.setState(() => {
-          return tabsKey ? {basePage: page} : {ratedPage: page}
-      })
-      tabsKey
-        ? this.onGetMovies(requestValue, page)
-        : this.getRatedFilms(sessionId, page)
+    this.setState(() => tabsKey ? { basePage: page } : { ratedPage: page })
+    // eslint-disable-next-line no-unused-expressions
+    tabsKey
+      ? this.onGetMovies(requestValue, page)
+      : this.getRatedFilms(sessionId, page)
   };
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
   resetPages = (page) => {
     this.setState({
-      page
+      basePage: page
     })
   };
+
   onLoadedDataToState = (requestData) => {
     const { movies, totalPages, basePage } = requestData;
     this.setState({
@@ -91,6 +104,7 @@ export default class App extends Component {
       error: false
     });
   };
+
   onLoadedRatedDataToState = (requestData) => {
     const { ratedMovies, totalPages, ratedPage } = requestData;
     this.setState({
@@ -101,6 +115,7 @@ export default class App extends Component {
       error: false
     });
   };
+
   onError = (err) => {
     const { message } = err
     this.setState({
@@ -112,7 +127,7 @@ export default class App extends Component {
 
   onChangeTabs = (key) => {
     const { requestValue, basePage, ratedPage, sessionId } = this.state
-    if(key === 2) {
+    if (key === 2) {
       this.setState({
         tabsKey: false
       })
@@ -125,13 +140,14 @@ export default class App extends Component {
     }
   };
 
+  // eslint-disable-next-line react/no-unused-class-component-methods, react/sort-comp
   onRatedMovie = async (movieId, value) => {
     const { sessionId } = this.state
     await this.moviesApiService.postRatedMovie(movieId, sessionId, value)
-          this.getRatedFilms(sessionId)
+    this.getRatedFilms(sessionId)
     // alert('Thank you for your appreciation')
   };
-  
+
   render() {
     const {
       movies,
@@ -143,6 +159,7 @@ export default class App extends Component {
       sessionId,
       basePage,
       ratedPage,
+      genresDataAr,
       totalBasePages,
       totalRatedPages
     } = this.state
@@ -150,15 +167,16 @@ export default class App extends Component {
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
       ? <MovieBody
-          tabsKey={tabsKey}
-          movies={tabsKey ? movies : ratedMovies}
-          page={tabsKey ? basePage : ratedPage}
-          sessionId={sessionId}
-          totalPages={tabsKey ? totalBasePages : totalRatedPages}
-          onChangePage={this.onChangePage}
-          error={error}
-          errorStatus={errorStatus}
-        />
+        tabsKey={tabsKey}
+        sessionId={sessionId}
+        genresDataAr={genresDataAr}
+        movies={tabsKey ? movies : ratedMovies}
+        page={tabsKey ? basePage : ratedPage}
+        totalPages={tabsKey ? totalBasePages : totalRatedPages}
+        onChangePage={this.onChangePage}
+        error={error}
+        errorStatus={errorStatus}
+      />
       : null
 
 
@@ -184,5 +202,5 @@ export default class App extends Component {
         </MoviesApiServiceProvider>
       </div>
     );
-  };
-};
+  }
+}
