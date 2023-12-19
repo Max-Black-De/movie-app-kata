@@ -1,6 +1,6 @@
 # Link to the Movie application
 
-[Open link to review my Movie App] (https://movie-app-kata-tau.vercel.app).
+[Open link to review my Movie App](https://movie-app-kata-tau.vercel.app).
 
 ## Available Scripts
 
