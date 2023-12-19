@@ -73,11 +73,12 @@ function MovieCard(props) {
   };
   const genresItem = () => {
     if(genreIdsArr.length !== 0){
-      return sortGenres(genresDataAr, genreIdsArr).map(genre =>
+      const sortedGenres = sortGenres(genresDataAr, genreIdsArr).map(genre =>
         <Button className='genresItem' key={uuidv4()} size='small' >
           {genre}
         </Button>
       )
+      return sortedGenres
     } else {
       return <p> There are no any genres </p>
     }
