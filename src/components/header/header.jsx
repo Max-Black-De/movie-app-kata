@@ -71,7 +71,7 @@ Header.propDefault = {
 }
 
 Header.propType = {
-  tabsKey: PropTypes.boolean,
+  tabsKey: PropTypes.bool,
   onRequestToMovie: PropTypes.func.isRequired
 }
 

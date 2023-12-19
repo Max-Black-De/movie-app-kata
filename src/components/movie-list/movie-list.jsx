@@ -4,7 +4,7 @@ import { MovieCard } from '../movie-card';
 
 import './movie-list.css';
 import { MoviesApiServiceConsumer } from '../ApiService/context-movieApiService';
-
+import { PropTypes } from 'prop-types';
 export default class MovieList extends Component {
 
   minimizeOverview = (text) => {
@@ -73,5 +73,8 @@ export default class MovieList extends Component {
       </ul>
     )
   }
-
 };
+
+MovieList.propType = {
+  movies: PropTypes.object.isRequired,
+}

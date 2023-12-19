@@ -3,6 +3,7 @@ import React from "react";
 import { Pagination } from "antd";
 import { MovieList } from "../movie-list";
 import { ErrorIndicator } from '../error-indicator';
+import { PropTypes } from 'prop-types'
 
 import './movie-body.css'
 
@@ -16,7 +17,7 @@ function MovieBody(props) {
     error,
     page,
   } = props;
-    
+    console.log(typeof page)
   const pagination = 
     <Pagination
       className='paginationMovie'
@@ -46,5 +47,18 @@ function MovieBody(props) {
     </div>
   )
 };
+
+// MovieBody.propDefault = {
+//   currentStatus: true,
+// }
+
+MovieBody.propType = {
+  movies: PropTypes.object.isRequired,
+  onChangePage: PropTypes.func.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  errorStatus: PropTypes.string.isRequired,
+  error: PropTypes.bool.isRequired,
+  page: PropTypes.number.isRequired,
+}
 
 export default MovieBody

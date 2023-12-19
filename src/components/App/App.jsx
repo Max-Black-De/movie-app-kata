@@ -129,7 +129,7 @@ export default class App extends Component {
     const { sessionId } = this.state
     await this.moviesApiService.postRatedMovie(movieId, sessionId, value)
           this.getRatedFilms(sessionId)
-    alert('Thank you for your appreciation')
+    // alert('Thank you for your appreciation')
   };
   
   render() {

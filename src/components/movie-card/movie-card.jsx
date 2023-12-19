@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid';
+import { PropTypes } from 'prop-types';
 
 import './movie-card.css';
 
@@ -73,7 +74,7 @@ function MovieCard(props) {
     }, []);
   };
   const genresItem = () => {
-    // console.log(genresDataAr)
+    console.log(typeof date)
     if(genreIdsArr.length !== 0){
       return sortGenres(genresDataAr, genreIdsArr).map(genre =>
         <Button className='genresItem' key={uuidv4()} size='small' >
@@ -149,6 +150,19 @@ function MovieCard(props) {
       </div>
     </li>
   )
+};
+
+MovieCard.propType = {
+  genresDataAr: PropTypes.object.isRequired,
+  onRatedMovie: PropTypes.func.isRequired,
+  genreIdsArr: PropTypes.object.isRequired,
+  overview: PropTypes.string.isRequired,
+  myRating: PropTypes.number.isRequired,
+  movieId: PropTypes.number.isRequired,
+  rating: PropTypes.number.isRequired,
+  poster: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
 }
 
 export default MovieCard;
