@@ -16,8 +16,10 @@ function MovieBody(props) {
     errorStatus,
     error,
     page,
+    tabsKey
+
   } = props;
-    console.log(typeof page)
+
   const pagination = 
     <Pagination
       className='paginationMovie'
@@ -37,6 +39,7 @@ function MovieBody(props) {
       {pagination}
       <MovieList
         movies={movies}
+        tabsKey={tabsKey}
       />
       {pagination}
     </>

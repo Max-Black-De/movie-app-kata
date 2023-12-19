@@ -18,8 +18,8 @@ export default class MovieList extends Component {
     return subString.substring(0, subString.lastIndexOf(' ')) + '...'
   }
 
-  movieItem(arr) {
-    // if(arr.length !== 0) {
+  movieItem(arr, tabsKey) {
+    if(arr.length !== 0) {
       return arr.map((movie) => {
         const {
           id,
@@ -56,15 +56,18 @@ export default class MovieList extends Component {
           </MoviesApiServiceConsumer>
         );
       });
-    // } else {
-    //   return <h1>Enter the movie you are interested in</h1>
-    // }
+    } else {
+      return (
+        tabsKey 
+          ? <h1 className='splash'>Enter the movie you are interested in</h1>
+          : <h1 className='splash'>Rate any movie</h1>
+      )
+    }
   }
 
   render() {
-    const { movies } = this.props
-    // console.log(movies)
-    const item = this.movieItem(movies)
+    const { movies, tabsKey } = this.props
+    const item = this.movieItem(movies, tabsKey)
     return (
       <ul className='App-list'>
         {

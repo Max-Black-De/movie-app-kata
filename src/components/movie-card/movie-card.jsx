@@ -38,20 +38,18 @@ function MovieCard(props) {
 
   const newOverview = overview || <p>Overview is not available</p>;
   const ratingColor = (rating) => {
-    let color = '';
-    if (Math.round(rating) >= 0 && Math.round(rating) < 3) {
-      color = '#E90000'
+    if (Math.trunc(rating) >= 0 && Math.trunc(rating) < 3) {
+      return '#E90000'
     }
-    if (Math.round(rating) >= 3 && Math.round(rating) < 5) {
-      color = '#E97E00'
+    if (Math.trunc(rating) >= 3 && Math.trunc(rating) < 5) {
+      return '#E97E00'
     }
-    if (Math.round(rating) >= 5 && Math.round(rating) < 7) {
-      color = '#E9D100'
+    if (Math.trunc(rating) >= 5 && Math.trunc(rating) < 7) {
+      return '#E9D100'
     }
-    if (Math.round(rating) >= 7) {
-      color = '#66E900'
+    if (Math.trunc(rating) >= 7) {
+      return '#66E900'
     }
-    return color
   };
   const ratingStyle = {
     width: 30,
@@ -74,7 +72,6 @@ function MovieCard(props) {
     }, []);
   };
   const genresItem = () => {
-    console.log(typeof date)
     if(genreIdsArr.length !== 0){
       return sortGenres(genresDataAr, genreIdsArr).map(genre =>
         <Button className='genresItem' key={uuidv4()} size='small' >

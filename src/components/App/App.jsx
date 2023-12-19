@@ -150,6 +150,7 @@ export default class App extends Component {
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
       ? <MovieBody
+          tabsKey={tabsKey}
           movies={tabsKey ? movies : ratedMovies}
           page={tabsKey ? basePage : ratedPage}
           sessionId={sessionId}
