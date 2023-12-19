@@ -146,7 +146,6 @@ export default class App extends Component {
       totalBasePages,
       totalRatedPages
     } = this.state
-    console.log(this.state)
     const hasData = !(loading && error)
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData

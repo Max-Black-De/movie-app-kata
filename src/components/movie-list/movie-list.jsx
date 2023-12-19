@@ -19,47 +19,51 @@ export default class MovieList extends Component {
   }
 
   movieItem(arr) {
-    return arr.map((movie) => {
-      const {
-        id,
-        date,
-        title,
-        poster,
-        rating,
-        myRating,
-        overview,
-        genreIdsArr,
-      } = movie
+    // if(arr.length !== 0) {
+      return arr.map((movie) => {
+        const {
+          id,
+          date,
+          title,
+          poster,
+          rating,
+          myRating,
+          overview,
+          genreIdsArr,
+        } = movie
 
-      return (
-        <MoviesApiServiceConsumer key={id}>
-          {
-            ({state, onRatedMovie}) => {
-              return(
-                <MovieCard
-                  key={id}
-                  date={date}
-                  movieId={id}
-                  title={title}
-                  poster={poster}
-                  rating={rating}
-                  myRating={myRating}
-                  genreIdsArr={genreIdsArr}
-                  onRatedMovie={onRatedMovie}
-                  genresDataAr={state.genresDataAr}
-                  overview={this.minimizeOverview(overview)}
-                />
-              )
+        return (
+          <MoviesApiServiceConsumer key={id}>
+            {
+              ({state, onRatedMovie}) => {
+                return(
+                  <MovieCard
+                    key={id}
+                    date={date}
+                    movieId={id}
+                    title={title}
+                    poster={poster}
+                    rating={rating}
+                    myRating={myRating}
+                    genreIdsArr={genreIdsArr}
+                    onRatedMovie={onRatedMovie}
+                    genresDataAr={state.genresDataAr}
+                    overview={this.minimizeOverview(overview)}
+                  />
+                )
+              }
             }
-          }
-        </MoviesApiServiceConsumer>
-
-      )
-    })
+          </MoviesApiServiceConsumer>
+        );
+      });
+    // } else {
+    //   return <h1>Enter the movie you are interested in</h1>
+    // }
   }
 
   render() {
     const { movies } = this.props
+    // console.log(movies)
     const item = this.movieItem(movies)
     return (
       <ul className='App-list'>

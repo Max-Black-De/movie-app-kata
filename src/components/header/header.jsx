@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Input, Tabs } from 'antd';
 import { debounce } from "lodash";
+import { PropTypes } from 'prop-types'
 
 import './header.css'
 
@@ -65,3 +66,12 @@ export default class Header extends Component {
     )
   }
 };
+Header.propDefault = {
+  currentStatus: true,
+}
+
+Header.propType = {
+  tabsKey: PropTypes.boolean,
+  onRequestToMovie: PropTypes.func.isRequired
+}
+

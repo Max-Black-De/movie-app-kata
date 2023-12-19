@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid';
 
 import './movie-card.css';
 
@@ -75,7 +76,7 @@ function MovieCard(props) {
     // console.log(genresDataAr)
     if(genreIdsArr.length !== 0){
       return sortGenres(genresDataAr, genreIdsArr).map(genre =>
-        <Button className='genresItem' key={movieId} size='small' >
+        <Button className='genresItem' key={uuidv4()} size='small' >
           {genre}
         </Button>
       )
