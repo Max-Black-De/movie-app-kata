@@ -141,8 +141,6 @@ export default class App extends Component {
       errorStatus,
       tabsKey,
       sessionId,
-      requestValue,
-      getRatedFilms,
       basePage,
       ratedPage,
       totalBasePages,
