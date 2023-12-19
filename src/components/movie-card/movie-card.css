@@ -1,13 +1,111 @@
-.ant-card {
-  max-height: 281px;
+.card-body {
+  height: 100%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  overflow: hidden
 }
-.ant-rate {
+.card-flex-main {
+  height: 100%;;
+}
+.user-rating-block {
   font-size: 16px;
-  margin-bottom: 17px;
+  margin-bottom: 6px;
 }
 .movieCardItem {
-  margin-top: 36px;
+  margin-bottom: 36px;
   height: 281px;
   width: 454px;
+}
+.movie-poster {
+  width: 183px;
+  height: 281px;
+  flex-shrink: 0;
+}
+.movieCardTitle {
+  margin: 0;
+  color: #000;
+  font-family: Inter, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+}
+.genresItem {
+  color: rgba(0, 0, 0, 0.65);
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.overview-paragraph {
+  margin: 0;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #000;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 183.333% */
+}
+.main-info-block {
+  width: 100%;
+  padding-top: 12px;
+  padding-left: 20px;
+  padding-right: 7px
+}
+.title-rating-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.date-release {
+  font-size: 12px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #827e7e;
+}
+
+/* media */
+@media (max-width: 510px) {
+  .movieCardItem {
+    margin-bottom: 20px;
+    height: 245px;
+    width: 387px
+  }
+  .movie-poster {
+    width: 60px;
+    height: 90px;
+    flex-shrink: 0;
+  }
+  .overview-paragraph {
+    /* padding-right: 20px; */
+    margin-left: -70px;
+  }
+  .main-info-block {
+    padding: 0;
+    margin-left: 10px;
+  }
+  .title-rating-block {
+    align-items: normal;
+  }
+  .card-flex-main {
+    padding: 0;
+    overflow: hidden;
+    margin: 6px 8px 0 10px;
+  }
+  .ant-card-body, .card-body, .card-flex-main, .main-info-block {
+    height: 100%;
+  }
+  .user-rating-block {
+    /* font-size: 20px; */
+    margin-bottom: 17px;
+  }
 }

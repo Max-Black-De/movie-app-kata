@@ -1,17 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
 .App-substrate  {
   text-align: center;
   background: #FFF;
-  max-width: 1010px;
   
 }
 .App-list {
   padding-left: 0;
-  margin-top: 0px;
+  margin: 0;
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  flex-grow: 1;
 }
 
 ul {
   list-style: none;
+}
+
+
+/* media */
+@media (max-width: 1350px) {
+  /* .App-list {
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+  } */
+  .App-substrate  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+  }
+  
 }

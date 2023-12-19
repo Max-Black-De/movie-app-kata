@@ -6,12 +6,7 @@ import './movie-list.css';
 import { MoviesApiServiceConsumer } from '../ApiService/context-movieApiService';
 
 export default class MovieList extends Component {
-  // componentDidUpdate() {
-  //   console.log('Updated in movie-list ')
-  // }
-  // componentWillUnmount() {
-  //   console.log('Unmounted in movie-list')
-  // }
+
   minimizeOverview = (text) => {
     if (text.length <= 200) {
       return text
@@ -27,15 +22,15 @@ export default class MovieList extends Component {
     return arr.map((movie) => {
       const {
         id,
-        title,
         date,
-        overview,
+        title,
         poster,
         rating,
+        myRating,
+        overview,
         genreIdsArr,
-        myRating
       } = movie
-      this.minimizeOverview(overview)
+
       return (
         <MoviesApiServiceConsumer key={id}>
           {

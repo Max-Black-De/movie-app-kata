@@ -15,36 +15,38 @@ export default class App extends Component {
   state = {
     movies: [],
     ratedMovies: [],
+    totalBasePages: null,
+    totalRatedPages: null,
     loading: true,
     tabsKey: true,
-    requestValue: 'leo'
+    requestValue: ''
   }
-  onGetMovies = (value, page) => {
-    this.moviesApiService
-      .getMovies(value, page)
-      .then(this.onLoadedDataToState)
-      .catch(this.onError)
+  onGetMovies = async (value, page) => {
+    await this.moviesApiService
+            .getMovies(value, page)
+            .then(this.onLoadedDataToState)
+            .catch(this.onError)
   };
-  getRatedFilms = (sessionId, page) => {
-    this.moviesApiService
-      .getMyRatedFilms(sessionId, page)
-      .then(this.onLoadedRatedDataToState)
-      .catch(this.onError)
+  getRatedFilms = async (sessionId, page) => {
+    await this.moviesApiService
+            .getMyRatedFilms(sessionId, page)
+            .then(this.onLoadedRatedDataToState)
+            .catch(this.onError)
   };
-  createGuestSession = () => {
-    this.moviesApiService
-    .createGuestSession()
-    .then(this.setSessionId)
+  createGuestSession = async () => {
+    await this.moviesApiService
+            .createGuestSession()
+            .then(this.setSessionId)
   };
-  getGenres = () => {
-    this.moviesApiService
+  getGenres = async () => {
+    await this.moviesApiService
       .getGenresData()
       .then(this.onLoadGenres)
       .catch(this.onError)
   };
 
   componentDidMount() {
-    this.onGetMovies(this.state.requestValue, 1)
+    this.onGetMovies('', 1)
     this.createGuestSession()
     this.getGenres()
   };
@@ -123,10 +125,11 @@ export default class App extends Component {
     }
   };
 
-  onRatedMovie = (movieId, value) => {
+  onRatedMovie = async (movieId, value) => {
     const { sessionId } = this.state
-    this.moviesApiService.postRatedMovie(movieId, sessionId, value)
-    this.getRatedFilms(sessionId)
+    await this.moviesApiService.postRatedMovie(movieId, sessionId, value)
+          this.getRatedFilms(sessionId)
+    alert('Thank you for your appreciation')
   };
   
   render() {
@@ -145,7 +148,7 @@ export default class App extends Component {
       totalBasePages,
       totalRatedPages
     } = this.state
-
+    console.log(this.state)
     const hasData = !(loading && error)
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
@@ -167,12 +170,11 @@ export default class App extends Component {
           <Header
             onChangeTabs={this.onChangeTabs}
             onRequestToMovie={this.onRequestToMovie}
-            requestValue={requestValue}
-            getRatedFilms={getRatedFilms}
+            tabsKey={tabsKey}
           />
           <Online>
-            {movieBody}
             {spinner}
+            {movieBody}
           </Online>
           <Offline>
             <Result

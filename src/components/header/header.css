@@ -1,0 +1,11 @@
+.movies-input {
+  width: 92.87%;
+  margin-bottom: 17px
+}
+
+@media (max-width: 420px) {
+  .movies-input {
+    /* width: 92.87%;
+    margin-bottom: 17px */
+  }
+}

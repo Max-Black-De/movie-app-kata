@@ -1,46 +1,67 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import { Input, Tabs } from 'antd'
+import { Input, Tabs } from 'antd';
 import { debounce } from "lodash";
 
-function Header(props) {
-  const { onRequestToMovie, onChangeTabs, getRatedFilms, requestValue } = props
+import './header.css'
 
-  const sendRequestToApi = debounce((e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    onRequestToMovie(e.target.value)
-    // this.onValueLoaded('')
-  },1500);
+export default class Header extends Component {
+  state = {
+    requestValue: ''
+  }
 
-  const tabsItems = [
+  inputHandler = (e) => {
+    let { value } = e.target
+    this.onValueLoaded(value)
+    this.sendRequestToApi()
+  };
+
+  onValueLoaded = (requestValue) => {
+    this.setState({
+      requestValue
+    })
+  };
+
+  sendRequestToApi = debounce(() => {
+    const { requestValue } = this.state
+    const { onRequestToMovie } = this.props
+    onRequestToMovie(requestValue)
+    this.onValueLoaded('')
+  }, 1000)
+
+  tabsItems = [
     {
       key: 1,
       label: 'Search',
-      children: <Input
-        style={{marginLeft: 36, marginRight: 36}}
-        placeholder='Enter your request'
-        onChange={sendRequestToApi}
-        // value={''}
-      />
     },
     {
       key: 2,
       label: 'Rated'
     },
   ];
-
-  return (
-    <Tabs
+  render() {
+    const { tabsKey } = this.props
+    return (
+      <>
+        <Tabs
           size={'middle'}
           centered={true}
           defaultActiveKey="1"
-          items={tabsItems}
-          onChange={onChangeTabs}
+          items={this.tabsItems}
+          onChange={this.props.onChangeTabs}
           destroyInactiveTabPane={true}
         />
-  )
+        {
+          tabsKey
+            ? <Input
+                className='movies-input'
+                placeholder='Enter your request'
+                onChange={this.inputHandler}
+                value={this.state.requestValue}
+              />
+            : null
+        }
+      </>
+    )
+  }
 };
-
-export default Header;
-      

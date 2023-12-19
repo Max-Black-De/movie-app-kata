@@ -3,5 +3,18 @@ body {
   background: #F7F7F7;
   display: flex;
   justify-content: center;
+  min-width: 420px;
 }
 
+#root {
+  width: 100%;
+  margin: 0 215px;
+}
+
+/* media */
+@media (max-width: 1350px) {
+  #root {
+    margin: 0;
+  }
+  
+}

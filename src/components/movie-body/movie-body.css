@@ -1,0 +1,8 @@
+.movie-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.paginationMovie {
+  margin-bottom: 17px
+}

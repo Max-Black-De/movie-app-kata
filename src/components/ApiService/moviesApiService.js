@@ -28,7 +28,6 @@ export default class MovieService {
     const totalPages = res.total_pages
     const basePage = res.page
     const movies = res.results.map(this.__transformMovieResults)
-    // console.log('GetMov', res)
     return ({ movies, totalPages, basePage })
   };
 
@@ -39,7 +38,6 @@ export default class MovieService {
 
   async createGuestSession() {
     const res = await this.getResource(`${this._apiBase}/authentication/guest_session/new?api_key=${this._apiKey}`, this.getOptions)
-    // console.log(res.guest_session_id)
     return res.guest_session_id
   };
 
@@ -48,7 +46,6 @@ export default class MovieService {
     const res = await this.getResource(
       `${this._apiBase}/guest_session/${sessionId}/rated/movies?api_key=${this._apiKey}&language=en-US&page=${pageNum}&sort_by=created_at.asc`,
       this.getOptions)
-      // console.log('GetRated', res)
     const totalPages = res.total_pages
     const ratedPage = res.page
     const ratedMovies = res.results.map(this.__transformMovieResults)
@@ -67,7 +64,6 @@ export default class MovieService {
         body: JSON.stringify({ value: value })
       }
     )
-    // console.log('PostRate', res)
     return res
   };
 

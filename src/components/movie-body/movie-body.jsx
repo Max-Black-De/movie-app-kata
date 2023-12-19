@@ -4,6 +4,8 @@ import { Pagination } from "antd";
 import { MovieList } from "../movie-list";
 import { ErrorIndicator } from '../error-indicator';
 
+import './movie-body.css'
+
 
 function MovieBody(props) {
   const {
@@ -17,6 +19,7 @@ function MovieBody(props) {
     
   const pagination = 
     <Pagination
+      className='paginationMovie'
       current={page}
       onChange={(page) => onChangePage(page)}
       hideOnSinglePage
@@ -39,9 +42,7 @@ function MovieBody(props) {
 
   return (
     <div className='movie-body'>
-      <section>
         {errorMovieToggle}
-      </section>
     </div>
   )
 };
