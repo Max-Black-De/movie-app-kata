@@ -9,6 +9,7 @@
   display: flex;
   text-align: center;
   background: #FFF;
+  align-items: center;
   flex-direction: column;
 }
 .App-list {
