@@ -6,9 +6,10 @@
 }
 
 .App-substrate  {
+  display: flex;
   text-align: center;
   background: #FFF;
-  
+  flex-direction: column;
 }
 .App-list {
   padding-left: 0;

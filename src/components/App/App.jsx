@@ -143,7 +143,8 @@ export default class App extends Component {
       totalBasePages,
       totalRatedPages
     } = this.state
-    const hasData = !(loading && error)
+
+    const hasData = !loading && !error
     const spinner = loading ? <Spin size="large" /> : null
     const movieBody = hasData
       ? <MovieBody
@@ -157,7 +158,7 @@ export default class App extends Component {
         error={error}
         errorStatus={errorStatus}
       />
-      : null
+      : <Spin size="large" />
 
 
     return (
@@ -169,8 +170,8 @@ export default class App extends Component {
             tabsKey={tabsKey}
           />
           <Online>
-            {spinner}
             {movieBody}
+            {spinner}
           </Online>
           <Offline>
             <Result
