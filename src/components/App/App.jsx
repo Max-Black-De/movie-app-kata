@@ -47,31 +47,18 @@ export default class App extends Component {
   createGuestSession = async () => {
     await this.moviesApiService
       .createGuestSession()
-      .then(this.setSessionId)
+      .then((sessionId) => this.setState({ sessionId }))
       .catch(this.onError)
   };
 
   getGenres = async () => {
     await this.moviesApiService
       .getGenresData()
-      .then(this.onLoadGenres)
+      .then((genresDataAr) => this.setState({ genresDataAr }))
       .catch(this.onError)
   };
 
-  onLoadGenres = (genresDataAr) => {
-    this.setState({
-      genresDataAr
-    })
-  };
-
-  setSessionId = (sessionId) => {
-    this.setState({
-      sessionId
-    })
-  };
-
   onRequestToMovie = (requestValue) => {
-    // this.resetPages(1)
     this.setState({
       requestValue
     });
@@ -85,13 +72,6 @@ export default class App extends Component {
     tabsKey
       ? this.onGetMovies(requestValue, page)
       : this.getRatedFilms(sessionId, page)
-  };
-
-  // eslint-disable-next-line react/no-unused-class-component-methods
-  resetPages = (page) => {
-    this.setState({
-      basePage: page
-    })
   };
 
   onLoadedDataToState = (requestData) => {
