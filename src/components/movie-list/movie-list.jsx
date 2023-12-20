@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -79,7 +80,7 @@ export default class MovieList extends Component {
 }
 
 MovieList.propTypes = {
-  movies: PropTypes.arrayOf.isRequired,
-  genresDataAr: PropTypes.arrayOf.isRequired,
+  movies: PropTypes.array.isRequired,
+  genresDataAr: PropTypes.array.isRequired,
   tabsKey: PropTypes.bool.isRequired
 }

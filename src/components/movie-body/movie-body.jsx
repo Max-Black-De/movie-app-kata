@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/require-default-props */
 import React from "react";
 
@@ -60,8 +61,8 @@ MovieBody.propDefault = {
 }
 
 MovieBody.propTypes = {
-  movies: PropTypes.arrayOf.isRequired,
-  genresDataAr: PropTypes.arrayOf.isRequired,
+  movies: PropTypes.array.isRequired,
+  genresDataAr: PropTypes.array.isRequired,
   onChangePage: PropTypes.func.isRequired,
   totalPages: PropTypes.number,
   errorStatus: PropTypes.string,

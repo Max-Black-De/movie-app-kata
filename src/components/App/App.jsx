@@ -158,7 +158,7 @@ export default class App extends Component {
         error={error}
         errorStatus={errorStatus}
       />
-      : <Spin size="large" />
+      : null
 
 
     return (
