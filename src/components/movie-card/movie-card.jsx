@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, Flex, Typography, Rate } from 'antd';
 import { format } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { PropTypes } from 'prop-types';
 
 import './movie-card.css';

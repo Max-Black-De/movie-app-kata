@@ -12,7 +12,6 @@ import { Header } from '../header';
 export default class App extends Component {
   moviesApiService = new MovieService();
 
-  // eslint-disable-next-line react/state-in-constructor
   state = {
     movies: [],
     ratedMovies: [],
@@ -68,7 +67,6 @@ export default class App extends Component {
   onChangePage = (page) => {
     const { tabsKey, requestValue, sessionId } = this.state;
     this.setState(() => tabsKey ? { basePage: page } : { ratedPage: page })
-    // eslint-disable-next-line no-unused-expressions
     tabsKey
       ? this.onGetMovies(requestValue, page)
       : this.getRatedFilms(sessionId, page)
@@ -120,7 +118,6 @@ export default class App extends Component {
     }
   };
 
-  // eslint-disable-next-line react/no-unused-class-component-methods, react/sort-comp
   onRatedMovie = async (movieId, value) => {
     const { sessionId } = this.state
     await this.moviesApiService.postRatedMovie(movieId, sessionId, value)

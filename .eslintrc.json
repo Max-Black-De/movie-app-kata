@@ -5,13 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:react-hooks/recommended",
-        "plugin:jsx-a11y/recommended",
-        "plugin:import/recommended",
-        "airbnb",
-        "plugin:react/jsx-runtime",
-        "prettier"
+        "plugin:react/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -21,7 +15,5 @@
         "react"
     ],
     "rules": {
-        "react/jsx-uses-vars": "error",
-        "react/jsx-uses-react": "error"
     }
 }

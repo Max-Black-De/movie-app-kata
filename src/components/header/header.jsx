@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 
 import { Input, Tabs } from 'antd';
 import { debounce } from "lodash";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { PropTypes } from 'prop-types'
 
 import './header.css'
 
 export default class Header extends Component {
-  // eslint-disable-next-line react/state-in-constructor
+
   state = {
     requestValue: ''
   }
@@ -61,7 +60,6 @@ export default class Header extends Component {
               className='movies-input'
               placeholder='Enter your request'
               onChange={this.inputHandler}
-              // eslint-disable-next-line react/destructuring-assignment
               value={this.state.requestValue}
             />
             : null

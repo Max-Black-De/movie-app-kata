@@ -1,7 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
-/* eslint-disable class-methods-use-this */
 import React, { Component } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { PropTypes } from 'prop-types';
 
 import { MovieCard } from '../movie-card';
