@@ -70,11 +70,11 @@ export default class Header extends Component {
 }
 
 Header.propDefault = {
-  currentStatus: true,
+  tabsKey: true,
 }
 
 Header.propTypes = {
-  tabsKey: PropTypes.bool.isRequired,
+  tabsKey: PropTypes.bool,
   onRequestToMovie: PropTypes.func.isRequired,
   onChangeTabs: PropTypes.func.isRequired
 }

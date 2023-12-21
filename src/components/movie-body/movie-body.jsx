@@ -54,7 +54,7 @@ function MovieBody(props) {
 }
 
 MovieBody.propDefault = {
-  currentStatus: true,
+  error: false,
 }
 
 MovieBody.propTypes = {

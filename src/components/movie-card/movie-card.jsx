@@ -89,7 +89,7 @@ function MovieCard(props) {
     <li className='movieCardItem'>
       <div className='card-body'>
         <Flex className='card-flex-main'>
-          <Flex >
+          <Flex className='posterWrap'>
             <img
               className='movie-poster'
               alt='movie poster'
@@ -151,15 +151,21 @@ function MovieCard(props) {
   )
 }
 
+MovieCard.defaultProps = {
+  genreIdsArr: [],
+  rating: 0.0,
+  poster: 'https://clipground.com/images/food-availability-clipart-17.png',
+};
+
 MovieCard.propTypes = {
-  genresDataAr: PropTypes.arrayOf.isRequired,
+  genresDataAr: PropTypes.arrayOf(PropTypes.object),
   onRatedMovie: PropTypes.func.isRequired,
-  genreIdsArr: PropTypes.arrayOf.isRequired,
+  genreIdsArr: PropTypes.arrayOf(PropTypes.number),
   overview: PropTypes.string.isRequired,
   myRating: PropTypes.number.isRequired,
   movieId: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,
-  poster: PropTypes.string.isRequired,
+  poster: PropTypes.string,
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
 }

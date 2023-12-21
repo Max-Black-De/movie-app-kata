@@ -76,8 +76,12 @@ export default class MovieList extends Component {
   }
 }
 
+MovieList.defaultProps = {
+  movies: []
+};
+
 MovieList.propTypes = {
-  movies: PropTypes.array.isRequired,
-  genresDataAr: PropTypes.array.isRequired,
+  movies: PropTypes.arrayOf(PropTypes.object),
+  genresDataAr: PropTypes.arrayOf(PropTypes.object),
   tabsKey: PropTypes.bool.isRequired
 }
