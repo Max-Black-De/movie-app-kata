@@ -12,6 +12,9 @@
   align-items: center;
   flex-direction: column;
 }
+.App-substrate span {
+  width: 100%
+}
 .App-list {
   padding-left: 0;
   margin: 0;

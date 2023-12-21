@@ -35,6 +35,12 @@ export default class App extends Component {
       .then(this.onLoadedDataToState)
       .catch(this.onError)
   };
+  onRequestMoviesByInput = async (value, page) => {
+    await this.moviesApiService
+      .requestMovie(value, page)
+      .then(this.onLoadedDataToState)
+      .catch(this.onError)
+  };
 
   getRatedFilms = async (sessionId, page) => {
     await this.moviesApiService
@@ -61,7 +67,7 @@ export default class App extends Component {
     this.setState({
       requestValue
     });
-    this.onGetMovies(requestValue)
+    this.onRequestMoviesByInput(requestValue)
   };
 
   onChangePage = (page) => {
@@ -165,7 +171,7 @@ export default class App extends Component {
             onRequestToMovie={this.onRequestToMovie}
             tabsKey={tabsKey}
           />
-          <Online>
+          <Online className='onlineComponent' style={{ width: 100 }}>
             {movieBody}
             {spinner}
           </Online>

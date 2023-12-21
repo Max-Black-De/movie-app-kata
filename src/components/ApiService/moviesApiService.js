@@ -1,5 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable class-methods-use-this */
+/* eslint-disable no-unused-vars */
 export default class MovieService {
   _apiBase = 'https://api.themoviedb.org/3';
 
@@ -20,11 +19,26 @@ export default class MovieService {
     if (!res.ok) {
       throw new Error(res.status)
     }
-    // if(body.results.length === 0 || body.genres.length === 0) {
-    //   throw new Error(res.status)
-    // }
     return body
-  };
+  }
+
+  async requestMovie(requestValue, page) {
+    const pageNum = page || 1
+    const response = await fetch(`${this._apiBase}/search/movie?api_key=${this._apiKey}&query=${requestValue}&include_adult=false&language=en-US&page=${pageNum}`, this.getOptions)
+
+    if (!response.ok) {
+      throw new Error(response.status)
+    }
+
+    const body = await response.json()
+    if (body.results.length === 0) {
+      throw new Error(response.status)
+    }
+    const totalPages = body.total_pages
+    const basePage = body.page
+    const movies = body.results.map(this.__transformMovieResults)
+    return ({ totalPages, basePage, movies })
+  }
 
   async getMovies(requestValue, page) {
     const pageNum = page || 1
@@ -33,17 +47,17 @@ export default class MovieService {
     const basePage = res.page
     const movies = res.results.map(this.__transformMovieResults)
     return ({ movies, totalPages, basePage })
-  };
+  }
 
   async getGenresData() {
     const res = await this.getResource(`${this._apiBase}/genre/movie/list?api_key=${this._apiKey}&language=en`, this.getOptions)
     return res.genres
-  };
+  }
 
   async createGuestSession() {
     const res = await this.getResource(`${this._apiBase}/authentication/guest_session/new?api_key=${this._apiKey}`, this.getOptions)
     return res.guest_session_id
-  };
+  }
 
   async getMyRatedFilms(sessionId, page) {
     const pageNum = page || 1
@@ -54,7 +68,7 @@ export default class MovieService {
     const ratedPage = res.page
     const ratedMovies = res.results.map(this.__transformMovieResults)
     return ({ totalPages, ratedMovies, ratedPage })
-  };
+  }
 
   async postRatedMovie(movieId, sessionId, value) {
     const res = await fetch(
@@ -69,7 +83,7 @@ export default class MovieService {
       }
     )
     return res
-  };
+  }
 
   __transformMovieResults(movie) {
     return {
@@ -82,5 +96,5 @@ export default class MovieService {
       myRating: movie.rating || 0,
       genreIdsArr: movie.genre_ids
     }
-  };
-};
+  }
+}
